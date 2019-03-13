@@ -1,0 +1,23 @@
+FROM ubuntu:14.04
+MAINTAINER Abdul "abdul@example.com"
+ENV REFRESHED_AT 2019-03-12
+RUN apt-get update
+
+#Need The below package before adding the repositroy
+RUN apt-get install software-properties-common -y
+
+#This repo is needed as Sinatra package needs ruby2.2
+RUN apt-add-repository ppa:brightbox/ruby-ng
+
+#Updating the ubuntu package manager
+RUN apt-get update
+
+#Installing the required gems
+RUN apt-get -y install ruby2.2 ruby2.2-dev build-essential redis-tools
+
+#Installing the Sinatra package
+RUN gem install --no-rdoc --no-ri sinatra json redis
+
+RUN mkdir -p /opt/webapp
+EXPOSE 4567
+CMD [ "/opt/webapp/bin/webapp" ]
